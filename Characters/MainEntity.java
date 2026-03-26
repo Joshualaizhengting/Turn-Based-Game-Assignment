@@ -1,4 +1,4 @@
-package Charas;
+package Characters;
 
 public abstract class MainEntity {
     public enum TypeofEntity{PLAY_ENTI, PLAY_WAR, PLAY_WIZ, ENE_WOLF, ENE_GOB};
@@ -32,6 +32,5 @@ public abstract class MainEntity {
     public abstract int takeDamage(int damage);
     public abstract int basicAttack(MainEntity defender);
     public abstract int effectiveDefense();
-    public abstract void gameReset();
 
 }
