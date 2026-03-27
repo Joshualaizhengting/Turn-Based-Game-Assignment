@@ -25,4 +25,5 @@ public abstract class Difficulty {
   public abstract DifficultyTier getTier();
   public abstract void printWaveInfo();
   public abstract void printEnemyCounts(MainEnemy[] wave);
+  public abstract void printEnemy(MainEnemy[] wave);
 }

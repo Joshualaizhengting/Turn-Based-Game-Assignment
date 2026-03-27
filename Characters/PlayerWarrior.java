@@ -1,15 +1,15 @@
 package Characters;
-import java.util.List;
-import java.util.ArrayList;
 
-public class PlayerWarrior extends MainPlayer implements EntityAction, TickCooldown{
+
+public class PlayerWarrior extends MainPlayer{
     //use of static vars because we want the changes to reflect as the game continues
-    private static final int BASE_HEALTH = 260;
-    private static final int BASE_ATTACK = 40;
+    private static final int BASE_HEALTH = 520;
+    private static final int BASE_ATTACK = 60;
     private static final int BASE_DEFENSE = 20;
     private static final int BASE_SPEED = 30;
     private int defendTurnRemaining = 0;
     private int skillcooldown = 0;
+    private int stunWindow = 2;
 
 
     public PlayerWarrior(String name){
@@ -21,20 +21,25 @@ public class PlayerWarrior extends MainPlayer implements EntityAction, TickCoold
     
     private void defendTick(){if (defendTurnRemaining>0) defendTurnRemaining--;}
     private void activateDefend(){defendTurnRemaining = 2;}
-
-    public int defendSkill(){activateDefend(); return effectiveDefense();}
+    
+    public int getStunWindow(){return stunWindow;}
+    public void defendSkill(){activateDefend();}
 
     //if defendturnremaining > 0 return this.def + 10
     public int effectiveDefense(){return defendTurnRemaining>0 ? this.defense + 10 : this.defense;}
     public int effectiveAttack(){return this.attack;}
 
-    public int specialskill(MainEnemy enemy){
+    //to allow for abstraction, pass a list of enemies for special skill but warrior will attack the first enemy of the list
+    public int specialSkill(MainEnemy[] enemies, int targetIndex){
         if (skillcooldown > 0){
             System.out.println("Skill on cooldown");
             return 0;
         }
         activateSkill();
-        return basicAttack(enemy);
+        enemies[targetIndex].setStun(stunWindow);
+        int damage = basicAttack(enemies[targetIndex]);
+        enemies[targetIndex].takeDamage(damage);
+        return damage;
     }
 
     public int getskillcooldown(){return skillcooldown;}
@@ -74,11 +79,11 @@ public class PlayerWarrior extends MainPlayer implements EntityAction, TickCoold
         this.speed = BASE_SPEED;
     }
 
-     public int getActionValue(){return 1000/this.speed;}
+    public int getActionValue(){return 1000/this.speed;}
 
-    private List<Inventory> inventory = new ArrayList<>();
+    private Inventory[] inventory;
     public void getInventory(){accessInventory(inventory);}
-    protected void accessInventory(List <Inventory> inventory){
+    private void accessInventory(Inventory[] inventory){
         for (Inventory item: inventory){
             System.out.println(item);
         }

@@ -5,4 +5,7 @@ public abstract class MainEnemy extends MainEntity{
         super(health, attack, defense, speed);
     }
     public abstract int setStun(int duration);
+    public abstract String getName();
+    public abstract void printName();
+    public abstract boolean stunStatus();
 }

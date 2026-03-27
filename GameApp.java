@@ -179,8 +179,6 @@ public class GameApp {
         break;
       }
     }
-
     //with these userSelected fields, we will construct a new GameSession.
-
   }
 }

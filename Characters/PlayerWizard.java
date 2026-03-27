@@ -1,11 +1,9 @@
 package Characters;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class PlayerWizard extends MainPlayer implements EntityAction, TickCooldown{
-    private static final int BASE_HEALTH = 200;
-    private static final int BASE_ATTACK = 50;
+public class PlayerWizard extends MainPlayer{
+    private static final int BASE_HEALTH = 400;
+    private static final int BASE_ATTACK = 80;
     private static final int BASE_DEFENSE = 10;
     private static final int BASE_SPEED = 20;
 
@@ -26,13 +24,12 @@ public class PlayerWizard extends MainPlayer implements EntityAction, TickCooldo
 
     private void defendTick(){if (defendTurnRemaining>0) defendTurnRemaining--;}
     private void activateDefend(){defendTurnRemaining = 2;}
-    public int defendSkill(){
+    public void defendSkill(){
         //hard code turn count so it becomes easier
         activateDefend();
-        return effectiveDefense();
     }
 
-    public int specialskill(List<MainEnemy> enemies){
+    public int specialSkill(MainEnemy[] enemies, int targetIndex){
         int totaldamage = 0;
         if (this.skillcooldown > 0){
             System.out.println("Skill on cooldown");
@@ -103,9 +100,9 @@ public class PlayerWizard extends MainPlayer implements EntityAction, TickCooldo
 
     public int getActionValue(){return 1000/this.speed;}
 
-    private List<Inventory> inventory = new ArrayList<>();
+    private Inventory[] inventory;
     public void getInventory(){accessInventory(inventory);}
-    protected void accessInventory(List <Inventory> inventory){
+    private void accessInventory(Inventory[] inventory){
         for (Inventory item: inventory){
             System.out.println(item);
         }

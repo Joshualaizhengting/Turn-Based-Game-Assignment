@@ -1,6 +1,6 @@
 package Characters;
 
-public class EnemyGoblin extends MainEnemy implements EntityAction, TickCooldown{
+public class EnemyGoblin extends MainEnemy{
     private static final int BASE_HEALTH = 55;
     private static final int BASE_ATTACK = 35;
     private static final int BASE_DEFENSE = 15;
@@ -53,6 +53,10 @@ public class EnemyGoblin extends MainEnemy implements EntityAction, TickCooldown
         this.defense = BASE_DEFENSE;
         this.speed = BASE_SPEED;
     }
+
+    public String getName(){return NAME;}
+
+    public void printName(){System.out.print(NAME);}
     
     @Override
     public void showStats(){

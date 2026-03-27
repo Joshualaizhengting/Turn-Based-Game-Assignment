@@ -34,16 +34,25 @@ public class DifficultyMedium extends Difficulty{
   }
 
 
-  public void printEnemyCounts(MainEnemy[] wave) {
-    int goblins = 0, wolves = 0;
+    public void printEnemyCounts(MainEnemy[] wave) {
+        int goblins = 0, wolves = 0;
 
-    for (MainEnemy e : wave) {
-        if (e instanceof EnemyGoblin) goblins++;
-        if (e instanceof EnemyWolf) wolves++;
+        for (MainEnemy e : wave) {
+            if (e instanceof EnemyGoblin) goblins++;
+            if (e instanceof EnemyWolf) wolves++;
+        }
+
+        if (goblins > 0) System.out.println("    - " + goblins + "x Goblin");
+        if (wolves > 0)  System.out.println("    - " + wolves + "x Wolf");
     }
 
-    if (goblins > 0) System.out.println("    - " + goblins + "x Goblin");
-    if (wolves > 0)  System.out.println("    - " + wolves + "x Wolf");
-  }
-
+    public void printEnemy(MainEnemy[] wave){
+        int count = 1;
+        for (MainEnemy e: wave){
+            System.out.print(" "+ count+ " ");
+            e.printName();
+            System.out.print("  Health: (" + e.getHealth()+ ") | ");
+            count++;
+        }
+    }
 }

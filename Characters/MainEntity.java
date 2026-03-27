@@ -1,6 +1,6 @@
 package Characters;
 
-public abstract class MainEntity {
+public abstract class MainEntity implements TickCooldown, EntityAction{
     public enum TypeofEntity{PLAY_ENTI, PLAY_WAR, PLAY_WIZ, ENE_WOLF, ENE_GOB};
     protected int health, defense, attack, speed;
     protected String name;
