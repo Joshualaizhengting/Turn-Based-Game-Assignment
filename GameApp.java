@@ -1,6 +1,9 @@
 import java.io.*;
 import java.util.Scanner;
+
+import Items.Inventory;
 import Items.Item;
+import Items.Potion;
 import Items.PowerStone;
 import Items.SmokeBomb;
 import Characters.EnemyGoblin;
@@ -10,6 +13,7 @@ import Characters.MainPlayer;
 import Difficulty.Difficulty;
 import Difficulty.DifficultyEasy;
 import Difficulty.DifficultyMedium;
+import Game.GameSession;
 import Difficulty.DifficultyHard;
 import Characters.PlayerWizard;
 import Characters.PlayerWarrior;
@@ -100,19 +104,23 @@ public class GameApp {
     //option to pick items, so we need to show the list of items available.
     System.out.println();
     System.out.println("Select 2 items to aid your adventure, " + userName);
+
     //BASED ON PROJECT SPECS, we HAVE to let user pick 2 items, not one or other number, but 2.
     //we also have to print the number for each item.
     //there are a total of 3 items in stated in the proj specs.
+
     Item[] allItems = {
       //new Potion("Potion"),
-      new SmokeBomb("Smoke Bomb"),  
+      new Potion( 1),
+      //new Smokebomb("smokebomb")
+      new PowerStone(1),  
       //new PowerStone("Power Stone"),
-      new PowerStone("PowerStone")
+      new SmokeBomb(1)
     };
+    int count = 0;
 
     //stores the user's choice for whichever items they want
-    Item[] selectedItems = new Item[2];
-    int count = 0;
+    Inventory playerInv = new Inventory(2);
 
     //System.out.println("Type in the item number and press enter for each item, you can select 2 items before your run");
 
@@ -126,13 +134,22 @@ public class GameApp {
       if (scanner.hasNextInt()){
         int userSelect = scanner.nextInt();
         scanner.nextLine();
+
+        //1->Potion
+        //2->PowerStone
+        //3->SmokeBomb
+        
         if (userSelect < 1 || userSelect > allItems.length){
           System.out.println("Invalid number, enter a number from 1 to 3.");
         }else{
           //duplicate items ARE allowed.
-          selectedItems[count] = allItems[userSelect - 1];
+          Item selected = allItems[userSelect -1];
+          if (selected instanceof Potion) playerInv.addToInventory(new Potion(1));
+          else if (selected instanceof PowerStone) playerInv.addToInventory(new PowerStone(1));
+          else if (selected instanceof SmokeBomb) playerInv.addToInventory(new SmokeBomb(1));
+          
           //Need to implement printing of item name
-          System.out.println("You selected - " + allItems[userSelect - 1].getName());
+          System.out.println("You selected - " + allItems[userSelect - 1].getName()+"\n");
           count++;
         }
       }else {
@@ -140,9 +157,9 @@ public class GameApp {
         scanner.nextLine(); //clears the bad input from buffer.
       }
     }
+    playerInv.printInventory();
+    System.out.println();
     
-
-    //Need to code out inventory in warrior and wizard, and pass the items into inventory.
 
     //user now selects Difficulty, Easy Medium or Hard, enemy needs to show their attributes too.
     //this is the difficulty we will pass into GameSession
@@ -175,7 +192,7 @@ public class GameApp {
         else if (userChoice == 'M') selectedDifficulty = medium;
         else                        selectedDifficulty = hard;
 
-        new GameSession(selectedDifficulty, player);
+        new GameSession(selectedDifficulty, player, playerInv);
         System.out.println("You selected: " + selectedDifficulty.getTier() + " difficulty.");
         break;
       }

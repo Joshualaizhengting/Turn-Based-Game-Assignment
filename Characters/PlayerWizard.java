@@ -29,10 +29,12 @@ public class PlayerWizard extends MainPlayer{
         activateDefend();
     }
 
+    public void healHealth(int heal){this.health = heal;}
+
     public int specialSkill(MainEnemy[] enemies, int targetIndex, boolean usedPowerstone){
         int totaldamage = 0;
         if (this.skillcooldown > 0 && !usedPowerstone){
-            System.out.println("Skill on cooldown");
+            System.out.println("Skill on cooldown, unable to act try again in "+ getskillcooldown() + " turns");
             return 0;
         }
         activateSkill();
@@ -52,7 +54,7 @@ public class PlayerWizard extends MainPlayer{
     public int skillbuff(){return attackBuff + 10 * killcount;}
     public int effectiveAttack(){return this.attack + attackBuff;}
     private void resetAttackBuff(){attackBuff = 0;}
-    public int getmaxHP(){return BASE_HEALTH;}
+    public int getbaseHP(){return BASE_HEALTH;}
     
     //call reset after each use of skill, want to check eveyrtime whether wizard kills or not
     private void resetKillCount(){killcount = 0;}
@@ -101,11 +103,5 @@ public class PlayerWizard extends MainPlayer{
 
     public int getActionValue(){return 1000/this.speed;}
 
-    private Inventory[] inventory;
-    public void getInventory(){accessInventory(inventory);}
-    private void accessInventory(Inventory[] inventory){
-        for (Inventory item: inventory){
-            System.out.println(item);
-        }
-    }
+
 }

@@ -1,10 +1,35 @@
 package Items;
 
+import Characters.MainPlayer;
+import Game.GameSession;
+import Characters.MainEnemy;
+import java.util.Scanner;
+
 public class PowerStone extends Item{
-    public PowerStone(String name){
-        super(name);
+    Scanner newScan = new Scanner(System.in);
+
+    public PowerStone(int quantity){
+        super("PowerStone", quantity);
     }
-    public void printName(){System.out.println(name);}
+
     public String getName(){return this.name;}
-    //since power stone gives a free use of skill, just call in main function dont need to think so much about this
+    
+    //since power stone gives a free use of skill, dont need to think so hard
+
+    public void ApplyEffect(GameSession session){
+        MainPlayer player = session.getPlayer();
+        MainEnemy[] enemies = session.getEnemies();
+        if (isAvailable()){
+            activate();
+            System.out.println("You used a Power Stone, Free Skill Usage");
+            System.out.println("Choose who to attack: [1, 2, 3]");
+            int target = newScan.nextInt();
+
+            int special = player.specialSkill(enemies, target-1, true);
+            System.out.println("You did a total of "+special+" damage because of the power stone.");
+            deactivate();
+        }else{
+            System.out.println("You ran out of items to use!");
+        }
+    }
 }

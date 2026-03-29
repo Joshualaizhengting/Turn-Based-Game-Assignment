@@ -28,12 +28,13 @@ public class PlayerWarrior extends MainPlayer{
     //if defendturnremaining > 0 return this.def + 10
     public int effectiveDefense(){return defendTurnRemaining>0 ? this.defense + 10 : this.defense;}
     public int effectiveAttack(){return this.attack;}
-    public int getmaxHP(){return BASE_HEALTH;}
+    public int getbaseHP(){return BASE_HEALTH;}
+    public void healHealth(int heal){this.health = heal;}
 
     //to allow for abstraction, pass a list of enemies for special skill but warrior will attack the first enemy of the list
     public int specialSkill(MainEnemy[] enemies, int targetIndex, boolean usedPowerstone){
         if (skillcooldown > 0 && !usedPowerstone){
-            System.out.println("Skill on cooldown");
+            System.out.println("Skill on cooldown, unable to act try again in "+ getskillcooldown() + " turns");
             return 0;
         }
         activateSkill();
@@ -49,7 +50,7 @@ public class PlayerWarrior extends MainPlayer{
 
     public int takeDamage(int damage){
         if (this.health <= 0){ 
-            System.out.println(name+" is already dead.");
+            System.out.println(name+" is already dead. Your attack misses.");
             return 0;
         }
         //damage taken is strictly basic attack damage only
@@ -84,11 +85,5 @@ public class PlayerWarrior extends MainPlayer{
     public int getActionValue(){return 1000/this.speed;}
     
 
-    private Inventory[] inventory;
-    public void getInventory(){accessInventory(inventory);}
-    private void accessInventory(Inventory[] inventory){
-        for (Inventory item: inventory){
-            System.out.println(item);
-        }
-    }
+  
 }

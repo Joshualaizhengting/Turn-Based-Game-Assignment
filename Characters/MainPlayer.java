@@ -10,8 +10,9 @@ public abstract class MainPlayer extends MainEntity{
 
     public abstract void defendSkill();
     public abstract void gameReset();
-    public abstract void getInventory();
-    public abstract int getmaxHP();
+    public abstract int getbaseHP();
     public abstract int specialSkill(MainEnemy[] enemy, int targetIndex, boolean usedPowerstone);
+    public abstract void healHealth(int heal);
+    public abstract int getskillcooldown();
      
 }   
