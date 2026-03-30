@@ -1,6 +1,6 @@
 package Characters;
 
-public abstract class MainEntity implements TickCooldown, EntityAction{
+public abstract class MainEntity implements TickCooldown, EntityAction, ActionValue{
     public enum TypeofEntity{PLAY_ENTI, PLAY_WAR, PLAY_WIZ, ENE_WOLF, ENE_GOB};
     protected int health, defense, attack, speed;
     protected String name;
@@ -27,11 +27,4 @@ public abstract class MainEntity implements TickCooldown, EntityAction{
     public int getAttack(){return attack;}
     public int getDefense(){return defense;}
     public int getSpeed(){return speed;}
-
-    public abstract void showStats();
-    public abstract int takeDamage(int damage);
-    public abstract int basicAttack(MainEntity defender);
-    public abstract int effectiveDefense();
-    public abstract int getActionValue();
-
 }

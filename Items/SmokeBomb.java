@@ -1,8 +1,6 @@
 package Items;
-import Characters.MainEnemy;
-import Characters.MainPlayer;
 import Characters.TickCooldown;
-import Game.GameSession;
+import Game.MainGameSession;
 
 public class SmokeBomb extends Item implements TickCooldown{
     private int ItemDuration = 2; //how many turns the smoke bomb will last for, can be changed for balancing
@@ -20,7 +18,7 @@ public class SmokeBomb extends Item implements TickCooldown{
     public void tickAll(){ItemTick();}
 
     public String getName(){return this.name;}
-    public void ApplyEffect(GameSession session){
+    public void ApplyEffect(MainGameSession session){
         activate();
         useSmokebomb();
     }

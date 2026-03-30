@@ -13,7 +13,8 @@ import Characters.MainPlayer;
 import Difficulty.Difficulty;
 import Difficulty.DifficultyEasy;
 import Difficulty.DifficultyMedium;
-import Game.GameSession;
+import Game.MainGameSession;
+import Game.GameSessionEasy;
 import Difficulty.DifficultyHard;
 import Characters.PlayerWizard;
 import Characters.PlayerWarrior;
@@ -188,11 +189,11 @@ public class GameApp {
         System.out.println("Please enter a valid choice: E, M or H and press enter.");
       }else {
         // match char to difficulty object
-        if (userChoice == 'E')      selectedDifficulty = easy;
+        if (userChoice == 'E'){selectedDifficulty = easy; new GameSessionEasy(selectedDifficulty, player, playerInv);}
         else if (userChoice == 'M') selectedDifficulty = medium;
         else                        selectedDifficulty = hard;
 
-        new GameSession(selectedDifficulty, player, playerInv);
+    
         System.out.println("You selected: " + selectedDifficulty.getTier() + " difficulty.");
         break;
       }

@@ -1,7 +1,7 @@
 package Items;
-import Game.GameSession;
+import Game.MainGameSession;
 
-public abstract class Item {
+public abstract class Item implements ItemEffect{
     protected String name;
     protected boolean isActive;
     protected int quantity;
@@ -19,5 +19,5 @@ public abstract class Item {
     public boolean status(){return isActive;}
     
     public abstract String getName();
-    public abstract void ApplyEffect(GameSession session);
+    public abstract void ApplyEffect(MainGameSession session);
 }

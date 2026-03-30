@@ -1,7 +1,7 @@
 package Items;
 
 import Characters.MainPlayer;
-import Game.GameSession;
+import Game.MainGameSession;
 import Characters.MainEnemy;
 import java.util.Scanner;
 
@@ -16,7 +16,7 @@ public class PowerStone extends Item{
     
     //since power stone gives a free use of skill, dont need to think so hard
 
-    public void ApplyEffect(GameSession session){
+    public void ApplyEffect(MainGameSession session){
         MainPlayer player = session.getPlayer();
         MainEnemy[] enemies = session.getEnemies();
         if (isAvailable()){

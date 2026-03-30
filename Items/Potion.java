@@ -1,6 +1,6 @@
 package Items;
 import Characters.MainPlayer;
-import Game.GameSession;
+import Game.MainGameSession;
 
 
 public class Potion extends Item{
@@ -12,7 +12,7 @@ public class Potion extends Item{
 
     public String getName(){return this.name;}
 
-    public void ApplyEffect(GameSession session){
+    public void ApplyEffect(MainGameSession session){
         MainPlayer player = session.getPlayer();
         int currentHP = player.getHealth();
         if (currentHP == player.getbaseHP()){
