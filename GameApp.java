@@ -1,22 +1,18 @@
 import java.io.*;
 import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.List;
 
 import Items.Inventory;
 import Items.Item;
 import Items.Potion;
 import Items.PowerStone;
 import Items.SmokeBomb;
-import Characters.EnemyGoblin;
-import Characters.EnemyWolf;
-import Characters.MainEnemy;
 import Characters.MainPlayer;
 import Difficulty.Difficulty;
 import Difficulty.DifficultyEasy;
 import Difficulty.DifficultyMedium;
-import Game.MainGameSession;
 import Game.GameSessionEasy;
+import Game.GameSessionHard;
+import Game.GameSessionMedium;
 import Difficulty.DifficultyHard;
 import Characters.PlayerWizard;
 import Characters.PlayerWarrior;
@@ -193,8 +189,8 @@ public class GameApp {
       }else {
         // match char to difficulty object
         if (userChoice == 'E'){selectedDifficulty = easy; new GameSessionEasy(selectedDifficulty, player, playerInv);}
-        else if (userChoice == 'M') selectedDifficulty = medium;
-        else                        selectedDifficulty = hard;
+        else if (userChoice == 'M'){selectedDifficulty = medium; new GameSessionMedium(selectedDifficulty, player, playerInv);}
+        else                        {selectedDifficulty = hard; new GameSessionHard(selectedDifficulty, player, playerInv);}
 
     
         System.out.println("You selected: " + selectedDifficulty.getTier() + " difficulty.");
@@ -202,6 +198,7 @@ public class GameApp {
       }
     }
     //with these userSelected fields, we will construct a new GameSession.
+    scanner.close();
   }
 }
 

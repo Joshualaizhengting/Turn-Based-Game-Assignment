@@ -3,9 +3,9 @@ package Characters;
 
 public class PlayerWarrior extends MainPlayer{
     //use of static vars because we want the changes to reflect as the game continues
-    private static final int BASE_HEALTH = 520;
+    private static final int BASE_HEALTH = 620;
     private static final int BASE_ATTACK = 60;
-    private static final int BASE_DEFENSE = 20;
+    private static final int BASE_DEFENSE = 30;
     private static final int BASE_SPEED = 30;
     private int defendTurnRemaining = 0;
     private int skillcooldown = 0;
@@ -61,6 +61,7 @@ public class PlayerWarrior extends MainPlayer{
     public int getskillcooldown(){return skillcooldown;}
     private void tickCooldown(){if (skillcooldown > 0) skillcooldown--;}
     private void activateSkill(){skillcooldown = 3;}
+    public void onLevelEnd(){}
 
     @Override
     public void tickAll(){defendTick(); tickCooldown();}

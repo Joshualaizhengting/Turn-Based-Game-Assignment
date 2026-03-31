@@ -12,5 +12,6 @@ public abstract class MainPlayer extends MainEntity implements PlayerBuff{
     public abstract int getbaseHP();
     public abstract int specialSkill(MainEnemy[] enemy, int targetIndex, boolean usedPowerstone);
     public abstract int getskillcooldown();
+    public abstract void onLevelEnd();
      
 }   

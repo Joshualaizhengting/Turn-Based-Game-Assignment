@@ -10,7 +10,7 @@ import Items.SmokeBomb;
 import Items.Item;
 
 
-public class GameSessionEasy extends MainGameSession{
+public class GameSessionMedium extends MainGameSession{
   protected MainEnemy[] enemies;
   protected boolean gameWon = false;
   protected boolean usedPowerstone = false;
@@ -18,7 +18,7 @@ public class GameSessionEasy extends MainGameSession{
   protected int target;
   
   //Constructor
-  public GameSessionEasy(Difficulty difficulty, MainPlayer player, Inventory inventory){
+  public GameSessionMedium(Difficulty difficulty, MainPlayer player, Inventory inventory){
     super(difficulty, player, inventory);
     startGameEasy(difficulty, player, inventory);
   }
@@ -36,6 +36,7 @@ public class GameSessionEasy extends MainGameSession{
     System.out.println("\nNew Game Start!\n");
     char attack = ' ';
     int itemchoice = 1; //garbage value first to allow the loop to run 
+    int level = 1;
 
     Scanner newscan = new Scanner(System.in);
     //get action value for player
@@ -73,7 +74,7 @@ public class GameSessionEasy extends MainGameSession{
 
           switch (attack){
             case 'B':
-              System.out.println("Choose who to attack: [1, 2, 3]");
+              System.out.println("Choose who to attack: [1, 2]");
               target = newscan.nextInt();
               if (enemies[target-1].getHealth() > 0){
                 int damage = player.basicAttack(enemies[target-1]);
@@ -90,7 +91,7 @@ public class GameSessionEasy extends MainGameSession{
               break;
 
             case 'S':
-              System.out.println("Choose who to attack: [1, 2, 3]");
+              System.out.println("Choose who to attack: [1, 2]");
               target = newscan.nextInt();
               
               if (player.getskillcooldown()>0){
@@ -172,7 +173,17 @@ public class GameSessionEasy extends MainGameSession{
       for (MainEnemy enemy: enemies){
         if (enemy.getHealth() > 0) {allDead = false;}
       }
-      if (allDead == true){gameWon = true;}
+      if (allDead == true && level < 2){    //2 waves for medium
+        System.out.printf("Wave %d dead, Wave %d spawning in", level, ++level);
+        this.enemies = difficulty.getBackupSpawn();
+        player.onLevelEnd();
+        System.out.println();
+        difficulty.printEnemy(enemies);
+        System.out.println();
+      }
+      if(allDead == true && level>1){
+        gameWon = true;
+      }
       if (player.getHealth() == 0){break;}
     }
 
@@ -204,6 +215,7 @@ public class GameSessionEasy extends MainGameSession{
     }
     return null;
   }
+
 }
 
 

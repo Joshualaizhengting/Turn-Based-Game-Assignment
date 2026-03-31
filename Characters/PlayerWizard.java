@@ -2,9 +2,9 @@ package Characters;
 
 
 public class PlayerWizard extends MainPlayer{
-    private static final int BASE_HEALTH = 400;
+    private static final int BASE_HEALTH = 500;
     private static final int BASE_ATTACK = 80;
-    private static final int BASE_DEFENSE = 10;
+    private static final int BASE_DEFENSE = 20;
     private static final int BASE_SPEED = 20;
 
     private int defendTurnRemaining = 0;

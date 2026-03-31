@@ -22,11 +22,14 @@ public class PowerStone extends Item{
         if (isAvailable()){
             activate();
             System.out.println("You used a Power Stone, Free Skill Usage");
-            System.out.println("Choose who to attack: [1, 2, 3]");
+            System.out.println("Choose who to attack: ");
+            System.out.print("[");
+            for (int i = 0; i<enemies.length; i++) System.out.print(i + ", ");
+            System.out.print("]");
             int target = newScan.nextInt();
 
             int special = player.specialSkill(enemies, target-1, true);
-            System.out.println("You did a total of "+special+" damage because of the power stone.");
+            System.out.println("You did a total of "+special+" damage because of the PowerStone.");
             deactivate();
         }else{
             System.out.println("You ran out of items to use!");

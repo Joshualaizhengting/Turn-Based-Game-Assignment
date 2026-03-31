@@ -1,8 +1,8 @@
 package Characters;
 
 public class EnemyWolf extends MainEnemy{
-    private static final int BASE_HEALTH = 200;
-    private static final int BASE_ATTACK = 45;
+    private static final int BASE_HEALTH = 300;
+    private static final int BASE_ATTACK = 15;
     private static final int BASE_DEFENSE = 5;
     private static final int BASE_SPEED = 35;
     private static final String NAME = "Wolf";
@@ -46,7 +46,7 @@ public class EnemyWolf extends MainEnemy{
     private void smokeTick(){if (smokeTurn>0) smokeTurn--;}
 
     public void tickAll(){stunTick();smokeTick();}
-
+    
     public int getActionValue(){return 1000/this.speed;}
     
     public int takeDamage(int damage){
