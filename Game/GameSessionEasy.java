@@ -17,7 +17,7 @@ public class GameSessionEasy extends MainGameSession{
   protected boolean usedSmokebomb;
   protected int target;
   
-  //Constructor
+
   public GameSessionEasy(Difficulty difficulty, MainPlayer player, Inventory inventory){
     super(difficulty, player, inventory);
     startGameEasy(difficulty, player, inventory);
@@ -29,8 +29,6 @@ public class GameSessionEasy extends MainGameSession{
   public Inventory getInven(){return inventory;}
   public int getTarget(){return target;}
   
-  //if game over, we print game over screen. 
-  //see how we want to implement user select after game over.
 
   protected void startGameEasy(Difficulty difficulty, MainPlayer player, Inventory inventory){
     System.out.println("\nNew Game Start!\n");
@@ -38,9 +36,7 @@ public class GameSessionEasy extends MainGameSession{
     int itemchoice = 1; //garbage value first to allow the loop to run 
 
     Scanner newscan = new Scanner(System.in);
-    //get action value for player
     int playerAV = player.getActionValue();
-
     SmokeBomb bomb = getSmokeBomb();
 
     //get the action value for the enemy
@@ -50,13 +46,12 @@ public class GameSessionEasy extends MainGameSession{
     for (int i = 0; i<enemies.length; i++){
       enemiesAV[i] = enemies[i].getActionValue();
     }
-    //this sets all the actionvalue for everyone first
+
     System.out.println();
     difficulty.printEnemy(enemies);
     System.out.println();
   
     while (!gameWon){
-      //every loop redeclare player loop false-> that way only when exception occurs it will skip enemy turn and reset
       boolean playerValidTurn = false;
 
       //every loop ticks player and enemies av down like for star rail and final fantasy
@@ -65,8 +60,8 @@ public class GameSessionEasy extends MainGameSession{
       
       //check both player and enemy AV
       if (playerAV == 0){
+
         //player takes turn
-        //depends on UI player chooses who to attack
         while(!playerValidTurn){
           System.out.println("\nWhat shall you do? \nBasic Attack [B] / Special Attack [S] / Defense Buff[D] / Use Item [U]");
           attack = newscan.next().toUpperCase().charAt(0);
@@ -75,32 +70,14 @@ public class GameSessionEasy extends MainGameSession{
             case 'B':
               System.out.println("Choose who to attack: [1, 2, 3]");
               target = newscan.nextInt();
-              if (enemies[target-1].getHealth() > 0){
-                int damage = player.basicAttack(enemies[target-1]);
-                enemies[target-1].takeDamage(damage);
-                
-                System.out.print("\nYou did "+damage+" damage to ");
-                enemies[target-1].printName();
-              }else{
-                int damage = player.basicAttack(enemies[target-1]);
-                enemies[target-1].takeDamage(damage);
-              } 
-              System.out.println();
+              playerDoBasicAttack(target);
               playerValidTurn = true;
               break;
 
             case 'S':
               System.out.println("Choose who to attack: [1, 2, 3]");
               target = newscan.nextInt();
-              
-              if (player.getskillcooldown()>0){
-                player.specialSkill(enemies, target-1, usedPowerstone);
-              }else{
-                //if not use Powerstone -> skill on cooldown, if use powerstone -> skill not on cooldown
-                int special = player.specialSkill(enemies, target-1, usedPowerstone);
-                System.out.println("You did a total of "+special+" damage.");
-                playerValidTurn = true;
-              }
+              playerValidTurn = playerDoSKill(target);
               break;
             
             case 'D':
@@ -111,20 +88,12 @@ public class GameSessionEasy extends MainGameSession{
               break;
             
             case 'U':
-              //use item
               try{
                 inventory.printInventory();
                 if (inventory.getInvenStatus()){
                   System.out.println("What shall you use? Pick your item: ");
                   itemchoice = newscan.nextInt();
-                  Item selected = inventory.getiItem(itemchoice-1);
-              
-                  selected.ApplyEffect(this);
-                  inventory.removeFromInventory(itemchoice-1);
-                  inventory.printInventory();
-      
-                  playerValidTurn = true;
-                
+                  playerValidTurn = playerUseItem(itemchoice);
                 }else{
                   System.out.println("Unable to use item, no more items to use\n");
                 }
@@ -153,11 +122,7 @@ public class GameSessionEasy extends MainGameSession{
           }
           else{
             //enemies take turn
-            int damage = enemies[j].basicAttack(player);
-            int damageTaken = player.takeDamage(damage);
-            System.out.print("You took " + damageTaken +" damage. ");
-            System.out.println("Health remaining: " + player.getHealth()+"\n");
-
+            enemyDoDamage(j);
           }
           enemiesAV[j] = enemies[j].getActionValue();
           enemies[j].tickAll();
@@ -169,26 +134,11 @@ public class GameSessionEasy extends MainGameSession{
       //if player health == 0 break the loop -> exit
       boolean allDead = true;
 
-      for (MainEnemy enemy: enemies){
-        if (enemy.getHealth() > 0) {allDead = false;}
-      }
-      if (allDead == true){gameWon = true;}
-      if (player.getHealth() == 0){break;}
+      gameWon = resetWave(allDead);
+      if (player.getHealth() == 0){gameWon = false; break;}
     }
 
-    //main game logic
-  
-    //use action value to determine turn count
-
-    //Game Over
-    if (gameWon == true){
-      System.out.println("You have conquered the dungeon, ");//add playerName
-      System.out.println("You Win!!");
-    }else {
-      System.out.println("YOU DIED");
-      System.out.println("Game Over!!");
-      //see if need to let user to retry, to redirect to loading screen
-    }
+    gameStatus(gameWon);
     newscan.close();
   }
 
@@ -196,7 +146,7 @@ public class GameSessionEasy extends MainGameSession{
   //if i declare a new instance of smokebomb, code will look at that smokebomb instead of the smokebomb in inventory, => resulting in when 
   //smoke bomb is used not correctly activated.
 
-  private SmokeBomb getSmokeBomb(){
+  protected SmokeBomb getSmokeBomb(){
     for (int i = 0; i<inventory.getSize(); i++){
       if (inventory.getiItem(i) instanceof SmokeBomb){
         return (SmokeBomb) inventory.getiItem(i);
@@ -204,7 +154,64 @@ public class GameSessionEasy extends MainGameSession{
     }
     return null;
   }
+
+  protected void playerDoBasicAttack(int target){
+    if (enemies[target-1].getHealth() > 0){
+      int damage = player.basicAttack(enemies[target-1]);
+      enemies[target-1].takeDamage(damage);
+      
+      System.out.print("\nYou did "+damage+" damage to ");
+      enemies[target-1].printName();
+    }else{
+      int damage = player.basicAttack(enemies[target-1]);
+      enemies[target-1].takeDamage(damage);
+    } 
+    System.out.println();
+  }
+
+  protected boolean playerDoSKill(int target){
+    if (player.getskillcooldown()>0){
+      player.specialSkill(enemies, target-1, usedPowerstone);
+      return false;
+    }else{
+      //if not use Powerstone -> skill on cooldown, if use powerstone -> skill not on cooldown
+      int special = player.specialSkill(enemies, target-1, usedPowerstone);
+      System.out.println("You did a total of "+special+" damage.");
+      return true;
+    }
+  }
+
+  protected boolean playerUseItem(int itemchoice){
+    Item selected = inventory.getiItem(itemchoice-1);       
+    selected.ApplyEffect(this);
+    inventory.removeFromInventory(itemchoice-1);
+    inventory.printInventory();
+    return true;
+  }
+
+  protected void gameStatus(boolean gameWon){
+    if (gameWon == true){
+      System.out.println("You have conquered the dungeon, ");
+      System.out.println("You Win!!");
+    }else {
+      System.out.println("YOU DIED");
+      System.out.println("Game Over!!");
+    }
+  }
+
+  protected void enemyDoDamage(int num){
+    int damage = enemies[num].basicAttack(player);
+    int damageTaken = player.takeDamage(damage);
+    System.out.print("You took " + damageTaken +" damage. ");
+    System.out.println("Health remaining: " + player.getHealth()+"\n");
+  }
+
+  protected boolean resetWave(boolean allDead){
+    for (MainEnemy enemy: enemies){
+        if (enemy.getHealth() > 0) {allDead = false;}
+      }
+      if (allDead == true){return true;}
+      return false;
+  }
 }
 
-
-//inventory call should reject player when it is empty fix that pls tmr
