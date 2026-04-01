@@ -33,7 +33,7 @@ public class GameSessionHard extends MainGameSession{
     protected void startGameEasy(Difficulty difficulty, MainPlayer player, Inventory inventory){
         System.out.println("\nNew Game Start!\n");
         char attack = ' ';
-        int itemchoice = 1; //garbage value first to allow the loop to run 
+        int itemchoice = 1;
 
         Scanner newscan = new Scanner(System.in);
         int playerAV = player.getActionValue();
@@ -42,9 +42,7 @@ public class GameSessionHard extends MainGameSession{
 
         this.enemies = difficulty.getInitialSpawn();
         int[] enemiesAV = new int[enemies.length];
-        for (int i = 0; i<enemies.length; i++){
-        enemiesAV[i] = enemies[i].getActionValue();
-        }
+        for (int i = 0; i<enemies.length; i++){enemiesAV[i] = enemies[i].getActionValue();}
         
         System.out.println();
         difficulty.printEnemy(enemies);
@@ -65,14 +63,22 @@ public class GameSessionHard extends MainGameSession{
 
                     switch (attack){
                         case 'B':
-                            System.out.println("Choose who to attack: [1, 2, 3]");
+                            System.out.println("Choose who to attack: ");
+                            System.out.print("[");
+                            for (int i = 0; i<enemies.length; i++){System.out.print(i+1); if (i<enemies.length-1){System.out.print(", ");}}
+                            System.out.print("]\n");
+
                             target = newscan.nextInt();
                             playerDoBasicAttack(target);
                             playerValidTurn = true;
                             break;
 
                         case 'S':
-                            System.out.println("Choose who to attack: [1, 2, 3]");
+                            System.out.println("Choose who to attack: ");
+                            System.out.print("[");
+                            for (int i = 0; i<enemies.length; i++){System.out.print(i+1); if (i<enemies.length-1){System.out.print(", ");}}
+                            System.out.print("]\n");
+
                             target = newscan.nextInt();
                             playerValidTurn = playerDoSKill(target);
                             break;

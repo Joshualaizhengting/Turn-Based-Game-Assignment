@@ -29,59 +29,56 @@
     public Inventory getInven(){return inventory;}
     public int getTarget(){return target;}
     
-    //if game over, we print game over screen. 
-    //see how we want to implement user select after game over.
 
     protected void startGameEasy(Difficulty difficulty, MainPlayer player, Inventory inventory){
         System.out.println("\nNew Game Start!\n");
         char attack = ' ';
-        int itemchoice = 1; //garbage value first to allow the loop to run 
+        int itemchoice = 1;
         int level = 1;
 
         Scanner newscan = new Scanner(System.in);
-        //get action value for player
         int playerAV = player.getActionValue();
-
         SmokeBomb bomb = getSmokeBomb();
 
-        //get the action value for the enemy
+
         this.enemies = difficulty.getInitialSpawn();
         int[] enemiesAV = new int[enemies.length];
-        
-        for (int i = 0; i<enemies.length; i++){
-        enemiesAV[i] = enemies[i].getActionValue();
-        }
-        //this sets all the actionvalue for everyone first
+        for (int i = 0; i<enemies.length; i++){enemiesAV[i] = enemies[i].getActionValue();}
+
         System.out.println();
         difficulty.printEnemy(enemies);
         System.out.println();
     
         while (!gameWon){
-            //every loop redeclare player loop false-> that way only when exception occurs it will skip enemy turn and reset
             boolean playerValidTurn = false;
 
             //every loop ticks player and enemies av down like for star rail and final fantasy
             playerAV --;
             for (int i = 0; i<enemiesAV.length; i++) enemiesAV[i]--;
             
-            //check both player and enemy AV
             if (playerAV == 0){
-                //player takes turn
-                //depends on UI player chooses who to attack
                 while(!playerValidTurn){
                     System.out.println("\nWhat shall you do? \nBasic Attack [B] / Special Attack [S] / Defense Buff[D] / Use Item [U]");
                     attack = newscan.next().toUpperCase().charAt(0);
 
                     switch (attack){
                         case 'B':
-                            System.out.println("Choose who to attack: [1, 2, 3]");
+                            System.out.println("Choose who to attack: ");
+                            System.out.print("[");
+                            for (int i = 0; i<enemies.length; i++){System.out.print(i+1); if (i<enemies.length-1){System.out.print(", ");}}
+                            System.out.print("]\n");
+
                             target = newscan.nextInt();
                             playerDoBasicAttack(target);
                             playerValidTurn = true;
                             break;
 
                         case 'S':
-                            System.out.println("Choose who to attack: [1, 2, 3]");
+                            System.out.println("Choose who to attack: ");
+                            System.out.print("[");
+                            for (int i = 0; i<enemies.length; i++){System.out.print(i+1); if (i<enemies.length-1){System.out.print(", ");}}
+                            System.out.print("]\n");
+
                             target = newscan.nextInt();
                             playerValidTurn = playerDoSKill(target);
                             break;
@@ -96,12 +93,13 @@
                         case 'U':
                             try{
                                 inventory.printInventory();
+
                                 if (inventory.getInvenStatus()){
-                                System.out.println("What shall you use? Pick your item: ");
-                                itemchoice = newscan.nextInt();
-                                playerValidTurn = playerUseItem(itemchoice);
+                                    System.out.println("What shall you use? Pick your item: ");
+                                    itemchoice = newscan.nextInt();
+                                    playerValidTurn = playerUseItem(itemchoice);
                                 }else{
-                                System.out.println("Unable to use item, no more items to use\n");
+                                    System.out.println("Unable to use item, no more items to use\n");
                                 }
                             }catch (IndexOutOfBoundsException e){
                                 System.out.println("Invalid Index. Try Again\n");
